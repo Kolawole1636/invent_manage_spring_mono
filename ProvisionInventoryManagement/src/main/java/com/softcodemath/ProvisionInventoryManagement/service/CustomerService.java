@@ -18,4 +18,12 @@ public class CustomerService {
 
 
     }
+
+    public Customer getCustomer(int id) {
+
+
+        return customerRepo.findById(id).get();
+
+
+    }
 }

@@ -28,4 +28,13 @@ public class CustomerController {
     }
 
 
+    @GetMapping("customer/{id}")
+    public Customer getCustomer(@PathVariable int id){
+
+        return customerService.getCustomer(id);
+
+
+    }
+
+
 }

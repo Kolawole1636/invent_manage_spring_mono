@@ -1,9 +1,12 @@
 package com.softcodemath.ProvisionInventoryManagement.service;
 
 
+import com.softcodemath.ProvisionInventoryManagement.dto.EmailDetails;
 import com.softcodemath.ProvisionInventoryManagement.dto.OrderRequest;
+import com.softcodemath.ProvisionInventoryManagement.entity.Customer;
 import com.softcodemath.ProvisionInventoryManagement.entity.Order;
 import com.softcodemath.ProvisionInventoryManagement.entity.Product;
+import com.softcodemath.ProvisionInventoryManagement.repository.CustomerRepo;
 import com.softcodemath.ProvisionInventoryManagement.repository.OrderRepo;
 import com.softcodemath.ProvisionInventoryManagement.repository.ProductRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +22,12 @@ public class OrderService {
     private OrderRepo orderRepo;
     @Autowired
     private ProductRepo productRepo;
+
+    @Autowired
+    private CustomerRepo customerRepo;
+
+    @Autowired
+    private EmailService emailService;
 
     public ResponseEntity<String> createOrder(OrderRequest orderRequest) {
 
@@ -36,9 +45,22 @@ public class OrderService {
                 order.setTotalPrice(findProduct.getPrice() * orderRequest.getQuantityOrder());
 
                 orderRepo.save(order);
+                productRepo.save(findProduct);
+
+                Customer customer = customerRepo.findById(order.getCustomerId()).get();
+
+
+                EmailDetails details = new EmailDetails();
+                details.setRecipient(customer.getEmail());
+                details.setSubject("ORDER CREATION");
+                details.setMessageBody("Welcome To SoftCode Store your order has been successfully created"+"\n"
+                        + "Product Ordered:" + findProduct.getName() + "\n"
+                        + "Quantities:" + orderRequest.getQuantityOrder() + "\n"
+                        + "Total Price:" + order.getTotalPrice() + "\n"
+                        + "Customer Name:" + customer.getName());
+                emailService.sendMail(details);
 
                 return new ResponseEntity<>("Order has been created successfully", HttpStatus.CREATED);
-
 
 
             }
@@ -58,8 +80,6 @@ public class OrderService {
 
 
     }
-
-
 
 
     public Order getOrder(int id) {

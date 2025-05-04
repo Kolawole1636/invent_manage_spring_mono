@@ -28,6 +28,11 @@ public class ProvisionInventoryManagementApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ProvisionInventoryManagementApplication.class, args);
+
+
+		// URL to access the swagger UI
+		// http://localhost:8080/swagger-ui/index.html
+
 	}
 
 }
