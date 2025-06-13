@@ -33,15 +33,18 @@ public class OrderService {
 
         Order order = new Order();
         if(productRepo.existsById(orderRequest.getProductId())){
+            System.out.println("helloooo 1");
 
-            Product findProduct = productRepo.findById(order.getProductId()).get();
+            Product findProduct = productRepo.findById(orderRequest.getProductId()).get();
+            System.out.println("helloooo 2");
 
             if(findProduct.getAvailableQuantity()>= order.getQuantityOrder()){
 
-                findProduct.setAvailableQuantity(findProduct.getAvailableQuantity() - order.getQuantityOrder());
+                findProduct.setAvailableQuantity(findProduct.getAvailableQuantity() - orderRequest.getQuantityOrder());
 
                 order.setCustomerId(orderRequest.getCustomerId());
-                order.setProductId(order.getProductId());
+                order.setProductId(orderRequest.getProductId());
+                order.setQuantityOrder(orderRequest.getQuantityOrder());
                 order.setTotalPrice(findProduct.getPrice() * orderRequest.getQuantityOrder());
 
                 orderRepo.save(order);

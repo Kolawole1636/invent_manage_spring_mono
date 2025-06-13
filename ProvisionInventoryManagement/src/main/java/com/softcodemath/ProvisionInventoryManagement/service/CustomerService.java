@@ -6,6 +6,8 @@ import com.softcodemath.ProvisionInventoryManagement.repository.CustomerRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CustomerService {
 
@@ -25,5 +27,11 @@ public class CustomerService {
         return customerRepo.findById(id).get();
 
 
+    }
+
+    public List<Customer> getCustomers() {
+
+
+        return customerRepo.findAll();
     }
 }
